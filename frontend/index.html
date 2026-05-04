@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plugo - Find. Plug. Go</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-nav">
+    <a class="brand" href="#finder" aria-label="Plugo home">
+      <span class="brand-mark">P</span>
+      <span>
+        <strong>Plugo</strong>
+        <small>Find. Plug. Go</small>
+      </span>
+    </a>
+    <nav>
+      <a href="#finder">Finder</a>
+      <a href="#garage">Garage</a>
+      <a href="#different">Why Plugo</a>
+      <a href="#operators">Operators</a>
+    </nav>
+    <a class="nav-action" href="login.html">Login</a>
+  </header>
+
+  <main>
+    <section class="hero" id="finder">
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-copy">
+        <span class="eyebrow">AI charging intelligence</span>
+        <h1>India's smarter EV charging layer.</h1>
+        <p>Plugo turns live station data into demand predictions, waiting-time estimates, and the best charging decision for every trip.</p>
+        <div class="hero-actions">
+          <button id="heroRecommendBtn" class="primary-btn">Find Best Station</button>
+          <a class="secondary-link" href="login.html">Add vehicle</a>
+        </div>
+      </div>
+
+      <section class="finder-console" aria-label="Plugo station finder">
+        <aside class="control-rail">
+          <div class="rail-header">
+            <div>
+              <span class="eyebrow">Driver Console</span>
+              <h2>Charge decision</h2>
+            </div>
+            <span id="stationCount" class="status-chip">0 stations</span>
+          </div>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <span>Starting point</span>
+              <button id="detectBtn" class="ghost-btn">Detect</button>
+            </div>
+            <div class="input-row place-search">
+              <label for="placeInput">Where are you now?</label>
+              <input id="placeInput" type="text" placeholder="Use current location or enter your area" />
+            </div>
+            <input id="latInput" type="hidden" value="12.1056" />
+            <input id="lngInput" type="hidden" value="75.2117" />
+            <div class="location-preset">
+              <span>Using nearby station data</span>
+              <strong id="locationLabel">Kannur region</strong>
+            </div>
+            <p class="field-note">Tap Detect for a personalized recommendation. No map coordinates needed.</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <span>Vehicle</span>
+              <strong id="selectionLabel">Car / Fast</strong>
+            </div>
+            <div class="segmented">
+              <button class="segment active" data-vehicle="car">Car</button>
+              <button class="segment" data-vehicle="scooter">Scooter</button>
+            </div>
+            <div class="segmented">
+              <button class="segment active" data-charger="fast">Fast</button>
+              <button class="segment" data-charger="slow">Slow</button>
+            </div>
+            <button id="recommendBtn" class="primary-btn wide">Find Best Station</button>
+          </section>
+
+          <section class="panel recommendation" id="recommendationPanel">
+            <div class="panel-heading">
+              <span>Charge readiness</span>
+              <strong>Ready</strong>
+            </div>
+            <p class="muted">Plugo checks station load, wait risk, and vehicle fit before suggesting a stop.</p>
+          </section>
+        </aside>
+
+        <section class="map-deck">
+          <div class="map-topbar">
+            <div>
+              <span class="eyebrow">Live demand map</span>
+              <h2>Station intelligence</h2>
+            </div>
+            <div class="legend">
+              <span><i class="dot low"></i>Low</span>
+              <span><i class="dot medium"></i>Medium</span>
+              <span><i class="dot high"></i>High</span>
+            </div>
+          </div>
+
+          <div id="map"></div>
+          <div id="mapFallback" class="map-fallback hidden">
+            <div class="fallback-visual">
+              <span class="route-pin pin-a"></span>
+              <span class="route-pin pin-b"></span>
+              <span class="route-pin pin-c"></span>
+              <svg viewBox="0 0 680 420" role="img" aria-label="Plugo station network">
+                <path d="M50 320 C150 150 260 360 360 210 S560 90 640 260" />
+                <circle cx="95" cy="260" r="7" />
+                <circle cx="355" cy="213" r="7" />
+                <circle cx="585" cy="188" r="7" />
+              </svg>
+            </div>
+            <div class="fallback-copy">
+              <h3>Map engine waiting for your key</h3>
+              <p>Add the Google Maps key in <strong>frontend/script.js</strong>. Station data, ML predictions, and recommendations are already live.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </section>
+
+    <section class="garage-section" id="garage">
+      <div class="section-heading">
+        <span class="eyebrow">Driver account</span>
+        <h2>Your EV garage lives on a separate login page.</h2>
+      </div>
+      <div class="garage-layout">
+        <section class="vehicle-summary">
+          <span class="eyebrow">Garage card</span>
+          <h3>Personalized charging starts with your EV.</h3>
+          <p>Add your EV once and Plugo can make station suggestions around connector fit, range comfort, and charging urgency.</p>
+          <div class="garage-metrics">
+            <span><strong>Connector fit</strong> checked</span>
+            <span><strong>Range comfort</strong> estimated</span>
+            <span><strong>Battery urgency</strong> considered</span>
+          </div>
+          <a class="nav-action garage-link" href="login.html">Open Login & Garage</a>
+        </section>
+      </div>
+    </section>
+
+    <section class="different-section" id="different">
+      <div class="section-heading">
+        <span class="eyebrow">Why Plugo is different</span>
+        <h2>Google Maps finds a charger. Plugo decides whether you should go there.</h2>
+      </div>
+      <div class="platform-grid">
+        <article class="feature-card">
+          <span>01</span>
+          <h3>Wait-risk prediction</h3>
+          <p>Plugo predicts station demand and converts it into a simple wait risk before the driver commits to a stop.</p>
+        </article>
+        <article class="feature-card">
+          <span>02</span>
+          <h3>Vehicle-aware fit</h3>
+          <p>Your saved EV profile helps Plugo prioritize connector compatibility, range comfort, and charging urgency.</p>
+        </article>
+        <article class="feature-card">
+          <span>03</span>
+          <h3>Decision score</h3>
+          <p>Distance, predicted demand, station status, and reliability become one recommendation instead of ten confusing pins.</p>
+        </article>
+        <article class="feature-card">
+          <span>04</span>
+          <h3>Operator intelligence</h3>
+          <p>The same engine can help hosts understand peak pressure, poor reliability, and where drivers are dropping off.</p>
+        </article>
+      </div>
+      <div class="station-strip" id="stationList"></div>
+    </section>
+
+    <section class="partner-section" id="operators">
+      <div>
+        <span class="eyebrow">Startup wedge</span>
+        <h2>From discovery to charge confidence.</h2>
+      </div>
+      <p>Statiq and similar platforms already prove that EV discovery, booking, and payments matter. Plugo's wedge is the intelligence layer: which charger is worth choosing right now for this vehicle and this driver.</p>
+      <a class="nav-action" href="#finder">Try the MVP</a>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

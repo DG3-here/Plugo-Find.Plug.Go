@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plugo Account - Vehicle Garage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-nav">
+    <a class="brand" href="/" aria-label="Plugo home">
+      <span class="brand-mark">P</span>
+      <span>
+        <strong>Plugo</strong>
+        <small>Find. Plug. Go</small>
+      </span>
+    </a>
+    <nav>
+      <a href="/">Finder</a>
+      <a href="/#different">Why Plugo</a>
+      <a href="/#operators">Operators</a>
+    </nav>
+    <a class="nav-action" href="/">Back to App</a>
+  </header>
+
+  <main class="login-page">
+    <section class="login-shell">
+      <div class="account-hero">
+        <span class="eyebrow">Plugo account</span>
+        <h1>Your EV garage.</h1>
+        <p class="muted">Attach your vehicle once. Plugo can then judge charger fit, range comfort, and urgency before it recommends a station.</p>
+      </div>
+
+      <section class="garage-form">
+        <section class="panel" id="loginPanel">
+          <div class="panel-heading">
+            <span>Login</span>
+            <strong id="sessionState">Guest</strong>
+          </div>
+          <div class="input-row">
+            <label for="mobileInput">Mobile number</label>
+            <input id="mobileInput" type="tel" placeholder="9876543210" />
+          </div>
+          <div class="inline-fields">
+            <input id="otpInput" type="text" inputmode="numeric" maxlength="6" placeholder="Mock OTP" />
+            <button id="loginBtn" class="secondary-btn">Verify</button>
+          </div>
+          <p class="field-note">For this MVP, any 4-6 digit OTP works.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <span>Vehicle profile</span>
+            <strong id="vehicleState">Not attached</strong>
+          </div>
+          <div class="grid-two">
+            <div class="input-row">
+              <label for="vehicleModel">EV model</label>
+              <input id="vehicleModel" type="text" placeholder="Tata Nexon.ev" />
+            </div>
+            <div class="input-row">
+              <label for="batteryRange">Usual range</label>
+              <input id="batteryRange" type="number" placeholder="320" />
+            </div>
+          </div>
+          <div class="grid-two">
+            <div class="input-row">
+              <label for="connectorType">Connector</label>
+              <input id="connectorType" type="text" placeholder="CCS2 / Type 2" />
+            </div>
+            <div class="input-row">
+              <label for="batteryPercent">Battery now</label>
+              <input id="batteryPercent" type="number" placeholder="42" />
+            </div>
+          </div>
+          <button id="saveVehicleBtn" class="primary-btn wide">Attach Vehicle</button>
+        </section>
+
+        <section class="vehicle-summary">
+          <span class="eyebrow">Garage card</span>
+          <h3 id="garageVehicleName">No vehicle attached</h3>
+          <p id="garageVehicleMeta">Add your EV once and Plugo can personalize charging recommendations.</p>
+          <div class="garage-metrics">
+            <span><strong id="garageRange">--</strong> range</span>
+            <span><strong id="garageConnector">--</strong> connector</span>
+            <span><strong id="garageBattery">--</strong> battery</span>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>
