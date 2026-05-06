@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -61,11 +62,11 @@
               <label for="placeInput">Where are you now?</label>
               <input id="placeInput" type="text" placeholder="Use current location or enter your area" />
             </div>
-            <input id="latInput" type="hidden" value="12.1056" />
-            <input id="lngInput" type="hidden" value="75.2117" />
+            <input id="latInput" type="hidden" value="" />
+            <input id="lngInput" type="hidden" value="" />
             <div class="location-preset">
               <span>Using nearby station data</span>
-              <strong id="locationLabel">Kannur region</strong>
+              <strong id="locationLabel">Detecting location</strong>
             </div>
             <p class="field-note">Tap Detect for a personalized recommendation. No map coordinates needed.</p>
           </section>
@@ -122,8 +123,8 @@
               </svg>
             </div>
             <div class="fallback-copy">
-              <h3>Map engine waiting for your key</h3>
-              <p>Add the Google Maps key in <strong>frontend/script.js</strong>. Station data, ML predictions, and recommendations are already live.</p>
+              <h3>Map engine unavailable</h3>
+              <p>Station data, ML predictions, and recommendations are live. Check your internet connection so the free OpenStreetMap tiles can load.</p>
             </div>
           </div>
         </section>
@@ -190,6 +191,7 @@
     </section>
   </main>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

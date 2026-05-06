@@ -41,21 +41,32 @@ Open:
 http://127.0.0.1:5000
 ```
 
-## Google Maps
+## Maps And Live Station Data
 
-Add your Google Maps JavaScript API key in `frontend/script.js`:
+The app uses Leaflet with OpenStreetMap tiles, so no Google Maps API key is required for the map.
 
-```js
-const GOOGLE_MAPS_API_KEY = "YOUR_KEY_HERE";
+For live charging-station search, create an Open Charge Map API key and set it before starting the backend:
+
+```powershell
+$env:OPENCHARGEMAP_API_KEY="YOUR_KEY_HERE"
+python app.py
 ```
 
-The app uses the Visualization library for the optional demand heatmap.
+If no Open Charge Map key is configured, Plugo falls back to `data/ml_dataset.csv`, which currently provides 200 local MVP stations.
 
 ## API Endpoints
 
 ### `GET /stations`
 
-Returns all stations with normalized station data plus predicted demand, confidence, waiting time, and reliability.
+Returns stations with normalized station data plus predicted demand, confidence, waiting time, and reliability.
+
+Optional query parameters:
+
+```text
+/stations?user_lat=12.9716&user_lng=77.5946&radius_km=35&max_results=80
+```
+
+When `OPENCHARGEMAP_API_KEY` is configured and coordinates are provided, this searches live Open Charge Map stations near the user. Otherwise it returns the local fallback dataset.
 
 ### `POST /predict`
 
@@ -99,7 +110,7 @@ Lower score is better.
 
 ## Data Behavior
 
-`data/dataset.csv` is treated as the real Open Charge Map export. If it is empty, Plugo automatically falls back to `data/ml_dataset.csv` so the MVP still runs locally.
+`data/dataset.csv` is treated as a real station export. If it is empty, Plugo automatically falls back to `data/ml_dataset.csv` so the MVP still runs locally. Live station search uses Open Charge Map when `OPENCHARGEMAP_API_KEY` is present.
 
 ## Retrain Model
 

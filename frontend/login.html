@@ -58,18 +58,36 @@
           </div>
           <div class="grid-two">
             <div class="input-row">
-              <label for="vehicleModel">EV model</label>
-              <input id="vehicleModel" type="text" placeholder="Tata Nexon.ev" />
+              <label for="vehicleCategory">Category</label>
+              <select id="vehicleCategory">
+                <option value="" disabled selected>Select category</option>
+                <option value="4-wheeler">4-Wheeler</option>
+                <option value="2-wheeler">2-Wheeler</option>
+              </select>
+            </div>
+            <div class="input-row">
+              <label for="vehicleBrand">Brand</label>
+              <select id="vehicleBrand" disabled>
+                <option value="" disabled selected>Select brand</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div class="input-row">
+              <label for="vehicleModel">EV Model</label>
+              <select id="vehicleModel" disabled>
+                <option value="" disabled selected>Select model</option>
+              </select>
             </div>
             <div class="input-row">
               <label for="batteryRange">Usual range</label>
-              <input id="batteryRange" type="number" placeholder="320" />
+              <input id="batteryRange" type="number" placeholder="e.g. 320" />
             </div>
           </div>
           <div class="grid-two">
             <div class="input-row">
               <label for="connectorType">Connector</label>
-              <input id="connectorType" type="text" placeholder="CCS2 / Type 2" />
+              <input id="connectorType" type="text" placeholder="Auto-filled" readonly style="background: var(--surface-hover); color: var(--text-muted);" />
             </div>
             <div class="input-row">
               <label for="batteryPercent">Battery now</label>

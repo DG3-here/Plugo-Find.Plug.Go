@@ -1,11 +1,16 @@
 import csv
 import math
+import os
+import urllib.parse
+import urllib.request
+import json
 from datetime import datetime
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
+OPEN_CHARGE_MAP_URL = "https://api.openchargemap.io/v3/poi/"
 
 DEMAND_COLORS = {
     "Low": "green",
@@ -109,13 +114,100 @@ def station_from_row(row, index):
     }
 
 
-def load_stations():
+def connection_title(connections):
+    if not connections:
+        return "Unknown"
+
+    connection = connections[0] or {}
+    connection_type = connection.get("ConnectionType") or {}
+    level = connection.get("Level") or {}
+    title = connection_type.get("Title") or level.get("Title")
+    return normalize_charger_type(title)
+
+
+def station_from_open_charge_map(item):
+    address = item.get("AddressInfo") or {}
+    status = item.get("StatusType") or {}
+    connections = item.get("Connections") or []
+    latitude = safe_float(address.get("Latitude"))
+    longitude = safe_float(address.get("Longitude"))
+    status_title = status.get("Title")
+
+    if status.get("IsOperational") is True:
+        status_title = "Operational"
+    elif status.get("IsOperational") is False:
+        status_title = status_title or "Temporarily Unavailable"
+
+    return {
+        "id": f"ocm-{item.get('ID')}",
+        "name": address.get("Title") or "Charging Station",
+        "latitude": latitude,
+        "longitude": longitude,
+        "charger_type": connection_title(connections),
+        "status": normalize_status(status_title),
+        "usage_count": safe_int(item.get("NumberOfPoints"), 0),
+        "base_waiting_time": 0,
+        "source": "open_charge_map",
+    }
+
+
+def fetch_open_charge_map_stations(latitude, longitude, radius_km=25, max_results=80):
+    api_key = os.getenv("OPENCHARGEMAP_API_KEY") or os.getenv("OCM_API_KEY")
+    if not api_key or latitude is None or longitude is None:
+        return []
+
+    params = {
+        "output": "json",
+        "compact": "false",
+        "verbose": "false",
+        "latitude": latitude,
+        "longitude": longitude,
+        "distance": radius_km,
+        "distanceunit": "KM",
+        "maxresults": max_results,
+    }
+    url = f"{OPEN_CHARGE_MAP_URL}?{urllib.parse.urlencode(params)}"
+    request = urllib.request.Request(
+        url,
+        headers={
+            "X-API-Key": api_key,
+            "User-Agent": "Plugo MVP",
+        },
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=8) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except (OSError, ValueError):
+        return []
+
+    stations = []
+    for item in payload:
+        station = station_from_open_charge_map(item)
+        if station["latitude"] and station["longitude"]:
+            stations.append(station)
+    return stations
+
+
+def load_local_stations(latitude=None, longitude=None, radius_km=25):
     stations = []
     for index, row in enumerate(load_station_rows()):
         station = station_from_row(row, index)
         if station["latitude"] and station["longitude"]:
+            if latitude is not None and longitude is not None:
+                dist = haversine_km(latitude, longitude, station["latitude"], station["longitude"])
+                if dist > radius_km:
+                    continue
+            station["source"] = "local_dataset"
             stations.append(station)
     return stations
+
+
+def load_stations(latitude=None, longitude=None, radius_km=25, max_results=80):
+    live_stations = fetch_open_charge_map_stations(
+        latitude, longitude, radius_km=radius_km, max_results=max_results
+    )
+    return live_stations or load_local_stations(latitude, longitude, radius_km)
 
 
 def estimate_waiting_time(demand, base_waiting_time=0):

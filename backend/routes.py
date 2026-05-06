@@ -28,9 +28,13 @@ def health():
 @api.get("/stations")
 def stations():
     hour, day_of_week = current_hour_and_day()
+    user_lat = safe_float(request.args.get("user_lat"), None)
+    user_lng = safe_float(request.args.get("user_lng"), None)
+    radius_km = safe_int(request.args.get("radius_km"), 25)
+    max_results = safe_int(request.args.get("max_results"), 80)
     enriched = []
 
-    for station in load_stations():
+    for station in load_stations(user_lat, user_lng, radius_km, max_results):
         prediction = model_bundle.predict(
             hour=hour,
             day_of_week=day_of_week,
@@ -51,7 +55,8 @@ def stations():
             }
         )
 
-    return jsonify({"stations": enriched, "count": len(enriched)})
+    source = enriched[0].get("source", "local_dataset") if enriched else "none"
+    return jsonify({"stations": enriched, "count": len(enriched), "source": source})
 
 
 @api.post("/predict")
@@ -98,7 +103,7 @@ def recommend():
     hour, day_of_week = current_hour_and_day()
     candidates = []
 
-    for station in load_stations():
+    for station in load_stations(user_lat, user_lng):
         if requested_charger != "Unknown" and station["charger_type"] != requested_charger:
             continue
 
@@ -134,5 +139,7 @@ def recommend():
     if not candidates:
         return jsonify({"error": "No matching stations found"}), 404
 
-    best_station = sorted(candidates, key=lambda item: item["score"])[0]
-    return jsonify({"best_station": best_station, "candidates_checked": len(candidates)})
+    sorted_candidates = sorted(candidates, key=lambda item: item["score"])
+    best_station = sorted_candidates[0]
+    other_options = sorted_candidates[1:4]
+    return jsonify({"best_station": best_station, "other_options": other_options, "candidates_checked": len(candidates)})
